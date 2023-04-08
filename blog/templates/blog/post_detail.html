@@ -1,0 +1,28 @@
+{% extends "blog/base.html" %}
+{% block content %}
+<article class="media content-section">
+    <div class="media-body">
+        <div class="article-metadata">
+            <a class="mr-2" href="{% url 'user-posts' object.author.username %}">{{ object.author }}</a>
+            <small class="text-muted">{{ object.date_posted|date:"l d F, Y" }}</small>
+            <div>
+                <a class="badge badge-pill badge-success" href="{% url 'post-update' object.id %}">Update</a>
+                <a class="badge badge-pill badge-danger" href="{% url 'post-delete' object.id %}">Delete</a>
+                <!-- <a class="btn btn-danger btn-sml mt-1 mb-1" href="{% url 'post-delete' object.id %}">Delete</a> -->
+            </div>
+        </div>
+        <h2 class="article-title">{{ object.title }}</h2>
+        {% if object.recipe_link %}
+        <a class="badge badge-pill badge-primary" href="{{object.recipe_link}}" target="_blank"
+            rel="noopener noreferrer">Recipe Link</a>
+        {% elif object.recipe_book %}
+        <p class="article-content">Recipe at: {{ object.recipe_book }}</p>
+        {% else %}
+        <p class="article-content">Please update this record to include either a recipe link or a recipe book</p>
+        {% endif %}
+        {% if object.content %}
+        <p class="article-content-ingredients">Shopping list: {{ object.content }}</p>
+        {% endif %}
+    </div>
+</article>
+{% endblock content %}
