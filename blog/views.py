@@ -16,7 +16,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from .models import Post
+from .models import Recipe
 
 # Create your views here.
 
@@ -24,43 +24,43 @@ motd = "This site will undergo maintenance on 4/15 at 2:00 AM UTC"
 
 
 def home(request):
-    context = {"posts": Post.objects.all()}
+    context = {"recipes": Recipe.objects.all()}
     if motd:
         messages.info(request, f"{motd}")
     return render(request, "blog/home.html", context)
 
 
-class PostListView(LoginRequiredMixin, ListView):
+class RecipeListView(LoginRequiredMixin, ListView):
 
-    model = Post
+    model = Recipe
     # New template replacing <app>/<model>_<view_type>.html
     template_name = "blog/home.html"
-    context_object_name = "posts"
+    context_object_name = "recipes"
     # In order to sort by date_posted, date_posted will reverse
     ordering = ["-date_posted"]
     paginate_by = 5
 
 
-class UserPostListView(LoginRequiredMixin, ListView):
-    model = Post
+class UserRecipeListView(LoginRequiredMixin, ListView):
+    model = Recipe
     # New template replacing <app>/<model>_<view_type>.html
-    template_name = "blog/user_posts.html"
-    context_object_name = "posts"
+    template_name = "blog/user_recipes.html"
+    context_object_name = "recipes"
     # In order to sort by date_posted, date_posted will reverse
     paginate_by = 5
 
     def get_queryset(self):
         """Returns posts that belong to the current user"""
         user = get_object_or_404(User, username=self.kwargs.get("username"))
-        return Post.objects.filter(author=user).order_by("-date_posted")
+        return Recipe.objects.filter(author=user).order_by("-date_posted")
 
 
-class PostDetailView(LoginRequiredMixin, DetailView):
-    model = Post
+class RecipeDetailView(LoginRequiredMixin, DetailView):
+    model = Recipe
 
 
-class PostCreateView(LoginRequiredMixin, CreateView):
-    model = Post
+class RecipeCreateView(LoginRequiredMixin, CreateView):
+    model = Recipe
     fields = ["title", "content", "recipe_link", "recipe_book"]
 
     def form_valid(self, form):
@@ -68,8 +68,8 @@ class PostCreateView(LoginRequiredMixin, CreateView):
         return super().form_valid(form)
 
 
-class PostUpdateView(LoginRequiredMixin, UpdateView):
-    model = Post
+class RecipeUpdateView(LoginRequiredMixin, UpdateView):
+    model = Recipe
     fields = ["title", "content", "recipe_link", "recipe_book"]
 
     def form_valid(self, form):
@@ -77,19 +77,19 @@ class PostUpdateView(LoginRequiredMixin, UpdateView):
         return super().form_valid(form)
 
     def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
+        recipe = self.get_object()
+        if self.request.user == recipe.author:
             return True
         return False
 
 
-class PostDeleteView(LoginRequiredMixin, DeleteView):
-    model = Post
+class RecipeDeleteView(LoginRequiredMixin, DeleteView):
+    model = Recipe
     success_url = "/"
 
     def test_func(self):
-        post = self.get_object()
-        if self.request.user == post.author:
+        recipe = self.get_object()
+        if self.request.user == recipe.author:
             return True
         return False
 

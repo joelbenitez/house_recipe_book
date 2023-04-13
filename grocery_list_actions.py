@@ -100,7 +100,7 @@ def main():
 
     for menu_item in weekly_menu:
         postgreSQL_select_Query = (
-            f"select * from blog_post where title = '{menu_item}' "
+            f"select * from blog_recipe where title = '{menu_item}' "
         )
 
         cursor.execute(postgreSQL_select_Query)

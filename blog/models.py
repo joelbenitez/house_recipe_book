@@ -6,7 +6,7 @@ from django.utils import timezone
 # Create your models here.
 
 
-class Post(models.Model):
+class Recipe(models.Model):
     title = models.CharField(max_length=100)
     content = models.TextField()
     recipe_link = models.URLField(blank=True)
@@ -18,4 +18,4 @@ class Post(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse("post-detail", kwargs={"pk": self.pk})
+        return reverse("recipe-detail", kwargs={"pk": self.pk})
